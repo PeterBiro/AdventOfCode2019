@@ -4,10 +4,10 @@
 
 bool hasDoubleDigit(int n) {
 	std::string nString = std::to_string(n);
-	std::vector <std::string> doubles{"99", "88", "77", "66", "55", "44", "33" };
+	std::vector <int> doubles{ 9,8,7,6,5,4,3 };
 
 	for (auto d : doubles) {
-		if (std::string::npos != nString.find(d)) return true;
+		if (std::string::npos != nString.find(std::to_string(d*11)) && std::string::npos == nString.find(std::to_string(d * 111))) return true;
 	}
 	return false;
 }

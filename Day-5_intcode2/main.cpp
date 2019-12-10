@@ -62,6 +62,32 @@ void doProcess(int& p) {
 		std::cout << getValue(p + 1, firstMode) <<std::endl;
 		p += 2;
 		break;
+	case 5:
+		if (getValue(p + 1, firstMode)) p = getValue(p + 2, secondMode);
+		else p += 3;
+		break;
+	case 6:
+		if (0 == getValue(p + 1, firstMode)) p = getValue(p + 2, secondMode);
+		else p += 3;
+		break;
+	case 7:
+		if (getValue(p + 1, firstMode) < getValue(p + 2, secondMode)) {
+			program[program[p + 3]] = 1;
+		}
+		else {
+			program[program[p + 3]] = 0;
+		}
+		p += 4;
+		break;
+	case 8:
+		if (getValue(p + 1, firstMode) == getValue(p + 2, secondMode)) {
+			program[program[p + 3]] = 1;
+		}
+		else {
+			program[program[p + 3]] = 0;
+		}
+		p += 4;
+		break;
 	case 99:
 		std::cout <<"99 in switch - case. IMPOSSIBLE!"<< std::endl;
 		break;

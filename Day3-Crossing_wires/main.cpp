@@ -28,6 +28,28 @@ void readInput(const char* fileName, std::vector <std::string> & firstLine, std:
 
 }
 
+void initStep(std::string code, int & x, int & y, int & s) {
+	switch (code.at(0)) {
+	case 'U':
+		x = 0;
+		y = 1;
+		break;
+	case 'D':
+		x = 0;
+		y = -1;
+		break;
+	case 'R':
+		x = 1;
+		y = 0;
+		break;
+	case 'L':
+		x = -1;
+		y = 0;
+		break;
+	}
+	 s = atoi(code.substr(1).c_str());
+}
+
 int main() {
 	std::vector <std::string> firstLine;
 	std::vector <std::string> secondLine;
@@ -40,67 +62,52 @@ int main() {
 
 	std::map<coord, int> firstVisited;
 
+	int totalStepCounter{ 0 };
+
 	for (std::string element : firstLine) {
-		switch (element.at(0)) {
-		case 'U':
-			x_step = 0;
-			y_step = 1;
-			break;
-		case 'D':
-			x_step = 0;
-			y_step = -1;
-			break;
-		case 'R':
-			x_step = 1;
-			y_step = 0;
-			break;
-		case 'L':
-			x_step = -1;
-			y_step = 0;
-			break;
-		}
-		int step = atoi(element.substr(1).c_str());
+		int step;
+		initStep(element, x_step, y_step, step);
+
 		for (int idx = 0; idx < step; ++idx) {
+			++totalStepCounter;
 			position.first += x_step;
 			position.second += y_step;
-			firstVisited[position] = 1;
+			if(firstVisited.end() == firstVisited.find(position))
+				firstVisited[position] = totalStepCounter;
 		}
 	 }
 
 
 	position = { 0, 0 };
 	int closest{ -1 };
+	totalStepCounter = 0;
+	std::map<coord, int> intersections;
 
 	for (std::string element : secondLine) {
-		switch (element.at(0)) {
-		case 'U':
-			x_step = 0;
-			y_step = 1;
-			break;
-		case 'D':
-			x_step = 0;
-			y_step = -1;
-			break;
-		case 'R':
-			x_step = 1;
-			y_step = 0;
-			break;
-		case 'L':
-			x_step = -1;
-			y_step = 0;
-			break;
-		}
-		int step = atoi(element.substr(1).c_str());
+		int step;
+		initStep(element, x_step, y_step, step);
+
 		for (int idx = 0; idx < step; ++idx) {
+			++totalStepCounter;
 			position.first += x_step;
 			position.second += y_step;
-			if (firstVisited.end() != firstVisited.find(position)) {
+			if (firstVisited.end() != firstVisited.find(position) && intersections.end() == intersections.find(position))
+			{
+				intersections[position] = firstVisited[position] + totalStepCounter;
+			}
+			/*if (firstVisited.end() != firstVisited.find(position)) {
 				if (abs(position.first) + abs(position.second) < closest || -1 == closest) {
 					closest = abs(position.first) + abs(position.second);
 				}
 			}
+			*/
 		}
 	}
-	std::cout << "Szerintem: " << closest;
+
+	int smallest = -1;
+	for (auto i : intersections) {
+		if (i.second < smallest || -1 == smallest) smallest = i.second;
+	}
+	std::cout << "Szerintem: " << smallest;
 	
 }

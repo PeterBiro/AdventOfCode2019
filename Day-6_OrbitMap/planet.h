@@ -14,6 +14,7 @@ public:
 	void addNewOrbitingPlanet(std::shared_ptr <PLANET>);
 	std::shared_ptr <PLANET> getOrbitCenter() const;
 	std::vector <std::shared_ptr <PLANET>> getOrbitingPlanets() const;
+	std::string getName();
 
 
 private:

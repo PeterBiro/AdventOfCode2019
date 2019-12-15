@@ -18,3 +18,4 @@ std::vector <std::shared_ptr <PLANET>> PLANET::getOrbitingPlanets() const { retu
 void PLANET::addNewOrbitingPlanet(std::shared_ptr <PLANET> aPlanet) {
 	mOrbitedBy.push_back(aPlanet);
 }
+std::string PLANET::getName() { return mName; }

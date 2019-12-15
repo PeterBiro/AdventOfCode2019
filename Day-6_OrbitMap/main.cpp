@@ -5,6 +5,7 @@
 #include <sstream>
 #include <map>
 #include <queue>
+#include <stack>
 
 #include "planet.h"
 
@@ -22,10 +23,7 @@ auto readInput(const char* fileName) {
 	return planetPairs;
 }
 
-
-
-
-int main() {
+void setupTheUniverse() {
 	auto planetConnections = readInput("input_1.txt");
 	universeRegister.emplace("COM", theUniverse);
 
@@ -40,14 +38,44 @@ int main() {
 				universeRegister[planetName]->addNewOrbitingPlanet(universeRegister[connection.second]);
 				freshPlanets.push(connection.second);
 			}
-		}			
+		}
+	}
+}
+
+auto simpleRouteFromTo(std::string from, std::string to) {
+	std::shared_ptr <PLANET> planet = universeRegister[from];
+	std::stack <std::string> result;
+	result.push(from);
+	while (planet->getName() != to) {
+		planet = planet->getOrbitCenter();
+		result.push(planet->getName());
+	}
+	return result;
+}
+
+int main() {
+	int task = 2;
+
+	setupTheUniverse();
+
+	if (1 == task) {
+		int n = 0;
+		for (auto planet : universeRegister) {
+			n += planet.second->getComDistance();
+		}
+		std::cout << n;
 	}
 
-	int n = 0;
-	for (auto planet : universeRegister) {
-		n += planet.second->getComDistance();
-	}
+	if (2 == task ) {
 
-	std::cout << n;
+		auto SAN_parents = simpleRouteFromTo("SAN", "COM");
+		auto YOU_parents = simpleRouteFromTo("YOU", "COM");
+
+		while (SAN_parents.top() == YOU_parents.top() || SAN_parents.empty() || YOU_parents.empty()) {
+			SAN_parents.pop();
+			YOU_parents.pop();
+		}
+		std::cout << SAN_parents.size() + YOU_parents.size() - 2;
+	}
 
 }
